@@ -16,7 +16,7 @@ export default class App extends React.Component {
   }
 
   setScreenSize = () => {
-    const { height, width } = Dimensions.get('screen');
+    const { height, width } = Dimensions.get('window');
     this.setState({width, height})
   }
 
@@ -25,7 +25,7 @@ export default class App extends React.Component {
       <View style={styles.container}>
         <Text>Welcome to React Native X-Platform app!</Text>
         <Text>Start editing `Root.js`</Text>
-        <Text> Platform:{Platform.OS}</Text>
+        <Text> Platform: {Platform.OS}</Text>
         <Text>Screen Size: {this.state.width} x {this.state.height}</Text>
       </View>
     );
