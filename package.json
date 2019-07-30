@@ -1,0 +1,39 @@
+{
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start:mobile": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "eject:mobile": "expo eject",
+    "start:web": "react-scripts start",
+    "build:web": "react-scripts build",
+    "eject:web": "react-scripts eject",
+    "start": "nf start"
+  },
+  "dependencies": {
+    "expo": "^32.0.0",
+    "react": "16.5.0",
+    "react-dom": "^16.8.6",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "react-native-web": "^0.11.4",
+    "react-navigation": "^3.11.0",
+    "react-scripts": "3.0.1"
+  },
+  "devDependencies": {
+    "babel-preset-expo": "^5.0.0",
+    "foreman": "^3.0.1"
+  },
+  "private": true,
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
