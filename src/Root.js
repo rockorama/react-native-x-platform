@@ -1,13 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View, Platform,  Dimensions } from 'react-native';
-import handleRotate from './handleRotate'
+import { Dimensions } from 'react-native';
+
+import Screen from './components/Screen'
 
 export default class App extends React.Component {
   state = {}
 
   componentDidMount () {
     this.setScreenSize()
-    handleRotate()
     Dimensions.addEventListener('change', this.setScreenSize)
   }
 
@@ -22,21 +22,7 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Welcome to React Native X-Platform app!</Text>
-        <Text>Start editing `Root.js`</Text>
-        <Text> Platform: {Platform.OS}</Text>
-        <Text>Screen Size: {this.state.width} x {this.state.height}</Text>
-      </View>
+      <Screen />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
