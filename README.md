@@ -21,6 +21,12 @@ Expo should then take you through any other setup required to run the simulators
 
 `yarn start:web`
 
-### Running iOS and web in one command (You need to have the iOS Emulator installed)
+
+### Running in desktop
+
+`yarn start:desktop`
+
+
+### Running iOS, desktop and web in one command (You need to have the iOS Emulator installed)
 
 `yarn start`
