@@ -9,21 +9,32 @@
     "build:web": "react-scripts build",
     "eject:web": "react-scripts eject",
     "start": "nf start",
-    "start:desktop": "wait-on http://localhost:5000/ && electron ./main"
+    "start:desktop": "wait-on http://localhost:5000/ && electron ./main",
+    "lint": "eslint ./src/*",
+    "flow": "flow check"
   },
   "dependencies": {
-    "expo": "^32.0.0",
-    "react": "16.5.0",
+    "expo": "^34.0.1",
+    "react": "16.8.3",
     "react-dom": "^16.8.6",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",
+    "react-native-gesture-handler": "~1.3.0",
+    "react-native-reanimated": "~1.1.0",
+    "react-native-screens": "1.0.0-alpha.22",
     "react-native-web": "^0.11.4",
-    "react-navigation": "^3.11.0",
+    "react-navigation": "^4.0.0",
+    "react-navigation-stack": "^1.5.3",
+    "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-preset-expo": "^5.0.0",
     "electron": "^6.0.0",
+    "eslint-config-mainframe": "^3.2.0",
+    "flow-bin": "^0.107.0",
     "foreman": "^3.0.1",
+    "prettier": "^1.18.2",
     "wait-on": "^3.3.0"
   },
   "private": true,
