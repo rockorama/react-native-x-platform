@@ -1,42 +1,31 @@
-import React from 'react';
-import { StyleSheet, Text, View, Platform,  Dimensions } from 'react-native';
-import handleRotate from './handleRotate'
+// @flow
 
-export default class App extends React.Component {
-  state = {}
+import React, { useState, useEffect } from 'react'
+import { Dimensions } from 'react-native'
+import Routes from './navigation'
+import Context, { type ScreenSize } from './context'
 
-  componentDidMount () {
-    this.setScreenSize()
-    handleRotate()
-    Dimensions.addEventListener('change', this.setScreenSize)
+const Root = () => {
+  const dimensions = Dimensions.get('window')
+  const [screenSize, setScreenSize] = useState<ScreenSize>(dimensions)
+
+  const defineDimensions = () => {
+    const dimensions = Dimensions.get('window')
+    setScreenSize(dimensions)
   }
 
-  componentWillUnmount () {
-    Dimensions.removeEventListener('change', this.setScreenSize)
-  }
+  useEffect(() => {
+    Dimensions.addEventListener('change', defineDimensions)
+    return () => {
+      Dimensions.removeEventListener('change', defineDimensions)
+    }
+  })
 
-  setScreenSize = () => {
-    const { height, width } = Dimensions.get('window');
-    this.setState({width, height})
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Welcome to React Native X-Platform app!</Text>
-        <Text>Start editing `Root.js`</Text>
-        <Text> Platform: {Platform.OS}</Text>
-        <Text>Screen Size: {this.state.width} x {this.state.height}</Text>
-      </View>
-    );
-  }
+  return (
+    <Context.Provider value={{ screenSize }}>
+      <Routes />
+    </Context.Provider>
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default Root

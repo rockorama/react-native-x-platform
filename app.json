@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "Genesis Block",
-    "slug": "genesis-block-app",
+    "name": "React Native XP App",
+    "slug": "react-native-xp",
     "entryPoint": "./src/index-expo.js",
     "privacy": "public",
-    "sdkVersion": "32.0.0",
+    "sdkVersion": "34.0.0",
     "platforms": [
       "ios",
       "android"
