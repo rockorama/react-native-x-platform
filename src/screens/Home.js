@@ -9,7 +9,7 @@ const Home = (props: NavigationScreenProps) => {
   const { screenSize } = useContext(Context)
   return (
     <View style={styles.container}>
-      <Text>Welcome to React Native X-Platform app!</Text>
+      <Text style={styles.title}>Welcome to React Native X-Platform app!</Text>
       <Text>Start editing `Root.js`</Text>
       <Text> Platform: {Platform.OS}</Text>
       <Text>
@@ -26,6 +26,9 @@ const Home = (props: NavigationScreenProps) => {
 export default Home
 
 const styles = StyleSheet.create({
+  title: {
+    fontFamily: 'Roboto-Bold',
+  },
   container: {
     flex: 1,
     // backgroundColor: '#fff',

@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import ROUTES from './routes'
+import ROUTES from '../screens'
 
 type RouteProps = {
   history: {

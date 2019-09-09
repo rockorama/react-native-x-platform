@@ -2,7 +2,7 @@
 import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 
-import ROUTES from './routes'
+import ROUTES from '../screens'
 
 const MAPPED_ROUTES = {}
 
