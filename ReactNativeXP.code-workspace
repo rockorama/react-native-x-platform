@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "./src/app-assets/"
+		},
+		{
+			"path": "./src/components//"
+		},
+		{
+			"path": "./src/context/"
+		},
+		{
+			"path": "./src/fonts/"
+		},
+		{
+			"path": "./src/screens/"
+		},
+	],
+	"settings": {}
+}
