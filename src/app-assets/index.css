@@ -8,3 +8,20 @@ body {
   height: 100vh;
   display: flex;
 }
+
+.switch-wrapper > div {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+}
+
+.switch-wrapper {
+  position: relative;
+}
+ 
+.switch-wrapper > div {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+}

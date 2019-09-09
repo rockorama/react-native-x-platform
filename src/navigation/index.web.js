@@ -2,6 +2,8 @@
 
 import React from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { AnimatedSwitch } from 'react-router-transition'
+
 import ROUTES from '../screens'
 
 type RouteProps = {
@@ -46,10 +48,16 @@ const navigationWrapper = Component => {
 const Routes = () => {
   return (
     <Router>
-      {MAPPED_ROUTES.map(item => {
-        const Component = navigationWrapper(item.component)
-        return <Route key={item.path} {...item} component={Component} />
-      })}
+      <AnimatedSwitch
+        atEnter={{ opacity: 0 }}
+        atLeave={{ opacity: 0 }}
+        atActive={{ opacity: 1 }}
+        className="switch-wrapper">
+        {MAPPED_ROUTES.map(item => {
+          const Component = navigationWrapper(item.component)
+          return <Route key={item.path} {...item} component={Component} />
+        })}
+      </AnimatedSwitch>
     </Router>
   )
 }

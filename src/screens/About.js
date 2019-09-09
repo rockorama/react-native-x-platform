@@ -1,15 +1,18 @@
 // @flow
 
 import React, { useContext } from 'react'
-import { StyleSheet, Text, View, Platform, Button } from 'react-native'
+import { StyleSheet, View, Platform, Button } from 'react-native'
 import { type NavigationScreenProps } from 'react-navigation'
+
+import Text from '../components/Text'
 import Context from '../context'
+import { COLORS } from '../styles'
 
 const About = (props: NavigationScreenProps) => {
   const { screenSize } = useContext(Context)
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>About!</Text>
+      <Text variant="TITLE">About!</Text>
       <Text> Platform: {Platform.OS}</Text>
       <Text>
         Screen Size: {screenSize.width} x {screenSize.height}
@@ -22,12 +25,9 @@ const About = (props: NavigationScreenProps) => {
 export default About
 
 const styles = StyleSheet.create({
-  title: {
-    fontFamily: 'Roboto-Bold',
-  },
   container: {
     flex: 1,
-    // backgroundColor: '#fff',
+    backgroundColor: COLORS.WHITE,
     alignItems: 'center',
     justifyContent: 'center',
   },

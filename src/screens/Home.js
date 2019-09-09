@@ -1,13 +1,18 @@
 // @flow
 
 import React from 'react'
-import { StyleSheet, Text, View, Button } from 'react-native'
+import { StyleSheet, View, Button } from 'react-native'
 import { type NavigationScreenProps } from 'react-navigation'
+
+import Text from '../components/Text'
+import { COLORS } from '../styles'
 
 const Home = (props: NavigationScreenProps) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to React Native X-Platform app!</Text>
+      <Text variant="TITLE" center color={COLORS.RED}>
+        Welcome to React Native X-Platform app!
+      </Text>
       <Text>Start editing `src/screens/Home.js`</Text>
       <Button
         title="About"
@@ -20,12 +25,9 @@ const Home = (props: NavigationScreenProps) => {
 export default Home
 
 const styles = StyleSheet.create({
-  title: {
-    fontFamily: 'Roboto-Bold',
-  },
   container: {
     flex: 1,
-    // backgroundColor: '#fff',
+    backgroundColor: COLORS.WHITE,
     alignItems: 'center',
     justifyContent: 'center',
   },
