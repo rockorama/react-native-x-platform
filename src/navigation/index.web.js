@@ -2,7 +2,6 @@
 
 import React, { useContext } from 'react'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
-import { AnimatedSwitch } from 'react-router-transition'
 import Context from '../context'
 import ROUTES from '../screens'
 
@@ -62,17 +61,7 @@ const ROUTE_COMPONENTS = MAPPED_ROUTES.map(
 )
 
 const Routes = () => {
-  return (
-    <Router>
-      <AnimatedSwitch
-        atEnter={{ opacity: 0 }}
-        atLeave={{ opacity: 0 }}
-        atActive={{ opacity: 1 }}
-        className="switch-wrapper">
-        {ROUTE_COMPONENTS}
-      </AnimatedSwitch>
-    </Router>
-  )
+  return <Router>{ROUTE_COMPONENTS}</Router>
 }
 
 export default Routes

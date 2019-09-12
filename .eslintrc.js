@@ -5,6 +5,7 @@ module.exports = {
     'react/no-unescaped-entities': 'off',
     'import/default': 'off',
     'import/no-named-as-default': 'off',
+    'import/named': 'off',
   },
   settings: {
     react: {

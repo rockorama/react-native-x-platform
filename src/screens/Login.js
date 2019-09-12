@@ -1,28 +1,23 @@
 // @flow
 
-import React, { useEffect, useContext } from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, View, Button } from 'react-native'
-import { type NavigationScreenProps } from 'react-navigation'
 
+import Navigate from '../navigation/Navigate'
 import { COLORS } from '../styles'
 import Screen from '../components/Screen'
 import Context from '../context'
 import { auth } from '../data/firebase'
 
-const Login = (props: NavigationScreenProps) => {
+const Login = () => {
   const { user } = useContext(Context)
-
-  useEffect(() => {
-    user && props.navigation.navigate('/')
-  }, [user, props])
-
-  if (user) {
-    return null
-  }
 
   const onPress = () => {
     auth.signInWithEmailAndPassword('diogo.perillo@gmail.com', 'password')
-    props.navigation.navigate('/')
+  }
+
+  if (user) {
+    return <Navigate to="/" />
   }
 
   return (

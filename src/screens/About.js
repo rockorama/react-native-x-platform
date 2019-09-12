@@ -11,7 +11,7 @@ import Screen from '../components/Screen'
 
 const About = (props: NavigationScreenProps) => {
   const { screenSize } = useContext(Context)
-  console.log('about')
+
   return (
     <Screen>
       <View style={styles.container}>
