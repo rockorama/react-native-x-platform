@@ -22,5 +22,9 @@
 			"path": "src/navigation"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"eslint.autoFixOnSave": true,
+		"eslint.alwaysShowStatus": true,
+		"git.autofetch": true
+	}
 }

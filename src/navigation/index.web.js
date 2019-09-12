@@ -1,16 +1,19 @@
 // @flow
 
-import React from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import React, { useContext } from 'react'
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import { AnimatedSwitch } from 'react-router-transition'
-
+import Context from '../context'
 import ROUTES from '../screens'
 
+type History = {
+  push: (value: string, state: Object) => void,
+  goBack: () => void,
+}
+
 type RouteProps = {
-  history: {
-    navigate: (value: string, state?: Object) => void,
-    goBack: () => void,
-  },
+  history: History,
+  noAuth?: boolean,
 }
 
 const MAPPED_ROUTES = ROUTES.map(route => {
@@ -18,32 +21,45 @@ const MAPPED_ROUTES = ROUTES.map(route => {
     path: route.path,
     component: route.screen,
     exact: !route.hasParams,
+    noAuth: route.noAuth,
   }
 })
 
-const navigate = history => {
+const navigate = (history: History) => {
   return (value, state) => {
     history.push(value, state)
   }
 }
 
-const goBack = history => {
+const goBack = (history: History) => {
   return () => {
     history.goBack()
   }
 }
 
-const getNavigation = history => {
+const getNavigation = (history: History) => {
   return { navigate: navigate(history), goBack: goBack(history) }
 }
 
-const navigationWrapper = Component => {
+const navigationWrapper = (Component: any, noAuth?: boolean) => {
   const WrappedComponent = (props: RouteProps) => {
+    const context = useContext(Context)
+    if (!context.user && !noAuth) {
+      return <Redirect to="/login" />
+    }
+
     const navigation = getNavigation(props.history)
     return <Component {...props} navigation={navigation} />
   }
   return WrappedComponent
 }
+
+const ROUTE_COMPONENTS = MAPPED_ROUTES.map(
+  ({ component, noAuth, path, ...other }) => {
+    const Component = navigationWrapper(component, noAuth)
+    return <Route key={path} path={path} {...other} component={Component} />
+  },
+)
 
 const Routes = () => {
   return (
@@ -53,10 +69,7 @@ const Routes = () => {
         atLeave={{ opacity: 0 }}
         atActive={{ opacity: 1 }}
         className="switch-wrapper">
-        {MAPPED_ROUTES.map(item => {
-          const Component = navigationWrapper(item.component)
-          return <Route key={item.path} {...item} component={Component} />
-        })}
+        {ROUTE_COMPONENTS}
       </AnimatedSwitch>
     </Router>
   )

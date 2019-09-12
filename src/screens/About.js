@@ -7,18 +7,21 @@ import { type NavigationScreenProps } from 'react-navigation'
 import Text from '../components/Text'
 import Context from '../context'
 import { COLORS } from '../styles'
+import Screen from '../components/Screen'
 
 const About = (props: NavigationScreenProps) => {
   const { screenSize } = useContext(Context)
   return (
-    <View style={styles.container}>
-      <Text variant="TITLE">About!</Text>
-      <Text> Platform: {Platform.OS}</Text>
-      <Text>
-        Screen Size: {screenSize.width} x {screenSize.height}
-      </Text>
-      <Button title="Back" onPress={() => props.navigation.navigate('/')} />
-    </View>
+    <Screen>
+      <View style={styles.container}>
+        <Text variant="TITLE">About!</Text>
+        <Text> Platform: {Platform.OS}</Text>
+        <Text>
+          Screen Size: {screenSize.width} x {screenSize.height}
+        </Text>
+        <Button title="Back" onPress={() => props.navigation.navigate('/')} />
+      </View>
+    </Screen>
   )
 }
 

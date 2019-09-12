@@ -5,9 +5,16 @@ import { Dimensions } from 'react-native'
 import Navigation from './navigation'
 import loadFonts from './fonts'
 import Context, { type ScreenSize } from './context'
+import { auth } from './data/firebase'
 
 const Root = () => {
-  const [screenSize, setScreenSize] = useState<ScreenSize>(null)
+  const [screenSize, setScreenSize] = useState<ScreenSize>({
+    width: 0,
+    height: 0,
+  })
+
+  const [ready, setReady] = useState<boolean>(false)
+  const [user, setUser] = useState<Object>(null)
   const [fontsLoaded, setFontsLoaded] = useState<boolean>(false)
 
   useEffect(() => {
@@ -32,10 +39,19 @@ const Root = () => {
     loadingFonts()
   })
 
-  if (!fontsLoaded || !screenSize) return null
+  useEffect(() => {
+    return auth.onAuthStateChanged(u => {
+      if (!ready) {
+        setReady(true)
+      }
+      setUser(u)
+    })
+  })
+
+  if (!ready || !fontsLoaded || !screenSize.width) return null
 
   return (
-    <Context.Provider value={{ screenSize }}>
+    <Context.Provider value={{ screenSize, user }}>
       <Navigation />
     </Context.Provider>
   )
