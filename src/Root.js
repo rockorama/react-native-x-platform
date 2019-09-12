@@ -41,10 +41,10 @@ const Root = () => {
 
   useEffect(() => {
     return auth.onAuthStateChanged(u => {
+      setUser(u)
       if (!ready) {
         setReady(true)
       }
-      setUser(u)
     })
   })
 

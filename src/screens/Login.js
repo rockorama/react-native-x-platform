@@ -14,7 +14,7 @@ const Login = (props: NavigationScreenProps) => {
 
   useEffect(() => {
     user && props.navigation.navigate('/')
-  }, [user])
+  }, [user, props])
 
   if (user) {
     return null
