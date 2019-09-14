@@ -3,7 +3,15 @@
 import { StyleSheet, PixelRatio } from 'react-native'
 export { default as COLORS } from './colors'
 
-export type TextVariant = 'BODY' | 'TITLE' | 'HEADER'
+export type TextVariant =
+  | 'BODY'
+  | 'TITLE'
+  | 'HEADER'
+  | 'BUTTON'
+  | 'SMALL'
+  | 'MICRO_REGULAR'
+  | 'MICRO_BOLD'
+  | 'TEXTFIELD'
 
 export const RATIO = PixelRatio.getFontScale()
 
@@ -23,5 +31,25 @@ export const TEXT_STYLES = StyleSheet.create({
     fontFamily: 'Roboto-Bold',
     fontSize: 18 * RATIO,
     textTransform: 'uppercase',
+  },
+  BUTTON: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: 18 * RATIO,
+  },
+  SMALL: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: 14 * RATIO,
+  },
+  MICRO_REGULAR: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: 10 * RATIO,
+  },
+  MICRO_BOLD: {
+    fontFamily: 'Roboto-Bold',
+    fontSize: 10 * RATIO,
+  },
+  TEXTFIELD: {
+    fontFamily: 'Roboto-Bold',
+    fontSize: 14 * RATIO,
   },
 })

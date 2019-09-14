@@ -4,7 +4,7 @@ import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 import Context from '../context'
 
-import ROUTES from '../screens'
+import ROUTES, { INITIAL_ROUTE } from '../screens'
 
 const APP_ROUTES = {}
 
@@ -28,7 +28,7 @@ ROUTES.filter(route => route.noAuth).forEach(route => {
 })
 
 const AuthStack = createStackNavigator(AUTH_ROUTES, {
-  initialRouteName: '/login',
+  initialRouteName: INITIAL_ROUTE,
   headerMode: 'none',
 })
 

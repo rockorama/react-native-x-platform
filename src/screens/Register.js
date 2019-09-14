@@ -1,7 +1,7 @@
 // @flow
 
 import React, { useContext, useState } from 'react'
-import { StyleSheet, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { type NavigationScreenProps } from 'react-navigation'
 
 import Navigate from '../navigation/Navigate'
@@ -14,7 +14,7 @@ import TextField from '../components/TextField'
 import Context from '../context'
 import { auth } from '../data/firebase'
 
-const Login = (props: NavigationScreenProps) => {
+const Register = (props: NavigationScreenProps) => {
   const { user } = useContext(Context)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -28,28 +28,27 @@ const Login = (props: NavigationScreenProps) => {
       setLoading(true)
       setError(null)
       try {
-        await auth.signInWithEmailAndPassword(
+        await auth.createUserWithEmailAndPassword(
           payload.fields.email,
           payload.fields.password,
         )
       } catch (error) {
         setLoading(false)
-        setError('Invalid username or password.')
+        setError(error.message)
       }
     }
   }
 
-  const forgotPassword = () => props.navigation.navigate('/forgot-password')
   const goBack = () => props.navigation.navigate('/welcome')
 
   return (
     <Screen
       headerProps={{
-        title: 'Login',
+        title: 'Register',
         onPressIcon: goBack,
       }}
       buttonProps={{
-        title: 'Login',
+        title: 'Create Account',
         submit: true,
         loading,
       }}
@@ -57,13 +56,10 @@ const Login = (props: NavigationScreenProps) => {
         onSubmit,
       }}>
       <View style={styles.container}>
+        <TextField required name="name" label="Name" />
         <TextField required type="email" name="email" label="Email" />
         <TextField required type="password" name="password" label="Password" />
-        <TouchableOpacity style={styles.text} onPress={forgotPassword}>
-          <Text center variant="SMALL">
-            forgot password?
-          </Text>
-        </TouchableOpacity>
+
         <Text style={styles.text} center variant="SMALL" color={COLORS.RED}>
           {error}
         </Text>
@@ -72,7 +68,7 @@ const Login = (props: NavigationScreenProps) => {
   )
 }
 
-export default Login
+export default Register
 
 const styles = StyleSheet.create({
   container: {
