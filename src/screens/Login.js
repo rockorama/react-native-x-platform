@@ -15,7 +15,7 @@ import Context from '../context'
 import { auth } from '../data/firebase'
 
 const Login = (props: NavigationScreenProps) => {
-  const { user } = useContext(Context)
+  const { user, refreshUser } = useContext(Context)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
@@ -32,6 +32,7 @@ const Login = (props: NavigationScreenProps) => {
           payload.fields.email,
           payload.fields.password,
         )
+        refreshUser()
       } catch (error) {
         setLoading(false)
         setError('Invalid username or password.')

@@ -1,27 +1,38 @@
 // @flow
 
-import React from 'react'
-import { StyleSheet, View, Button } from 'react-native'
+import React, { useContext } from 'react'
+import { StyleSheet, View } from 'react-native'
 import { type NavigationScreenProps } from 'react-navigation'
 
 import Screen from '../components/Screen'
 import Text from '../components/Text'
 import { COLORS } from '../styles'
-import { auth } from '../data/firebase'
+import Context from '../context/'
+import { useDoc, useCollection } from '../data/useData'
+import EmailNotVerified from './EmailNotVerified'
 
 const Home = (props: NavigationScreenProps) => {
+  const { user } = useContext(Context)
+
+  const id = user ? user.uid : 0
+  const userData = useDoc(`users/${id}`)
+  const friends = useCollection(`users/${id}/friends`, {})
+
+  if (user && !user.emailVerified) {
+    return <EmailNotVerified />
+  }
+
   return (
-    <Screen>
+    <Screen
+      headerProps={{
+        title:
+          userData.loading || friends.loading ? 'Loading' : userData.data.name,
+        icon: 'Settings',
+        onPressIcon: () => props.navigation.navigate('/settings'),
+      }}
+      noLogo={!friends.loading && friends.data && !!friends.data.length}>
       <View style={styles.container}>
-        <Text variant="TITLE" center color={COLORS.RED}>
-          Welcome to React Native X-Platform app!
-        </Text>
-        <Text>Start editing `src/screens/Home.js`</Text>
-        <Button
-          title="About"
-          onPress={() => props.navigation.navigate('/about')}
-        />
-        <Button title="Logout" onPress={() => auth.signOut()} />
+        <Text variant="TITLE" center color={COLORS.RED}></Text>
       </View>
     </Screen>
   )

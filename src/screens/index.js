@@ -1,5 +1,5 @@
 import Home from './Home'
-import About from './About'
+import Settings from './Settings'
 
 import Welcome from './Welcome'
 import Register from './Register'
@@ -15,8 +15,8 @@ export default [
     screen: Home,
   },
   {
-    path: '/about',
-    screen: About,
+    path: '/settings',
+    screen: Settings,
   },
   {
     path: '/welcome',

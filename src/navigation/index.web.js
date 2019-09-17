@@ -10,6 +10,7 @@ import ROUTES, { INITIAL_ROUTE } from '../screens'
 type History = {
   push: (value: string, state: Object) => void,
   goBack: () => void,
+  location: Object,
 }
 
 type Match = {

@@ -37,7 +37,6 @@ const AuthContainer = createAppContainer(AuthStack)
 
 const Router = () => {
   const context = useContext(Context)
-
   return context.user ? <AppContainer /> : <AuthContainer />
 }
 

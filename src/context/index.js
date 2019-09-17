@@ -10,6 +10,7 @@ export type ScreenSize = {
 export type ContextType = {
   screenSize: ScreenSize,
   user?: ?Object,
+  refreshUser: () => any,
 }
 
 const Context = createContext<ContextType>({
@@ -18,6 +19,7 @@ const Context = createContext<ContextType>({
     height: 0,
   },
   user: {},
+  refreshUser: () => {},
 })
 
 export default Context

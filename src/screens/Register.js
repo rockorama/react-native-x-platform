@@ -13,9 +13,10 @@ import TextField from '../components/TextField'
 
 import Context from '../context'
 import { auth } from '../data/firebase'
+import { createUser } from '../data/user'
 
 const Register = (props: NavigationScreenProps) => {
-  const { user } = useContext(Context)
+  const { user, refreshUser } = useContext(Context)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
@@ -32,6 +33,14 @@ const Register = (props: NavigationScreenProps) => {
           payload.fields.email,
           payload.fields.password,
         )
+        const user = auth.currentUser
+
+        await user.sendEmailVerification()
+        await user.updateProfile({
+          displayName: payload.fields.name,
+        })
+        createUser(user)
+        refreshUser()
       } catch (error) {
         setLoading(false)
         setError(error.message)
