@@ -6,7 +6,10 @@ import { type NavigationScreenProps } from 'react-navigation'
 
 import Screen from '../components/Screen'
 import Text from '../components/Text'
-import { COLORS } from '../styles'
+import Button from '../components/Button'
+import Avatar from '../components/Avatar'
+
+import { COLORS, SPACING } from '../styles'
 import { auth } from '../data/firebase'
 import Context from '../context/'
 import useData from '../data/useData'
@@ -27,12 +30,37 @@ const Settings = (props: NavigationScreenProps) => {
         secondary: true,
         onPress: () => auth.signOut(),
       }}
-      noLogo>
-      <View style={styles.container}>
-        <Text variant="TITLE" center color={COLORS.RED}>
-          {userData && userData.data && userData.data.name}
-        </Text>
-      </View>
+      noLogo
+      noScroll>
+      {!userData.loading && (
+        <View style={styles.container}>
+          <View style={styles.avatarArea}>
+            <Avatar url={userData.data.avatar} size="large" />
+          </View>
+          <Text center>{userData && userData.data && userData.data.name}</Text>
+
+          <View style={styles.buttons}>
+            <View style={styles.button}>
+              <Button
+                title="Change Avatar"
+                onPress={() => props.navigation.navigate('/avatar')}
+              />
+            </View>
+            <View style={styles.button}>
+              <Button
+                title="Change Name"
+                onPress={() => props.navigation.navigate('/change-name')}
+              />
+            </View>
+            <View style={styles.button}>
+              <Button
+                title="Change Password"
+                onPress={() => props.navigation.navigate('/change-password')}
+              />
+            </View>
+          </View>
+        </View>
+      )}
     </Screen>
   )
 }
@@ -45,5 +73,17 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.WHITE,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  avatarArea: {
+    marginTop: SPACING * 10,
+    marginBottom: SPACING * 4,
+  },
+  buttons: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  button: {
+    marginVertical: SPACING * 2,
   },
 })

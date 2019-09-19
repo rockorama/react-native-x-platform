@@ -38,7 +38,13 @@ const MAPPED_ROUTES = ROUTES.map(route => {
 
 const navigate = (history: History) => {
   return (value, state) => {
-    history.push(value, state)
+    let params = ''
+    if (state) {
+      params = `/${Object.keys(state)
+        .map(k => state[k])
+        .join('/')}`
+    }
+    history.push(`${value}${params}`)
   }
 }
 

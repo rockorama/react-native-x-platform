@@ -1,5 +1,10 @@
 import Home from './Home'
 import Settings from './Settings'
+import AvatarUpload from './AvatarUpload'
+import ChangePassword from './ChangePassword'
+import ChangeName from './ChangeName'
+import AddFriend from './AddFriend'
+import Chat from './Chat'
 
 import Welcome from './Welcome'
 import Register from './Register'
@@ -18,6 +23,28 @@ export default [
     path: '/settings',
     screen: Settings,
   },
+  {
+    path: '/avatar',
+    screen: AvatarUpload,
+  },
+  {
+    path: '/change-password',
+    screen: ChangePassword,
+  },
+  {
+    path: '/add-friend',
+    screen: AddFriend,
+  },
+  {
+    path: '/change-name',
+    screen: ChangeName,
+  },
+  {
+    path: '/chat',
+    screen: Chat,
+    params: ['id'],
+  },
+
   {
     path: '/welcome',
     screen: Welcome,

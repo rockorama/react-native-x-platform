@@ -27,7 +27,8 @@ type Props = {
   secondaryButtonProps?: ButtonProps,
   noLogo?: boolean,
   noScroll?: boolean,
-  children: any,
+  children?: any,
+  full?: boolean,
 }
 
 const Screen = (props: Props) => {
@@ -35,6 +36,10 @@ const Screen = (props: Props) => {
 
   if (Platform.OS === 'web') {
     contentContainerStyle.push(styles.shadowContainer)
+  }
+
+  if (props.full) {
+    contentContainerStyle.push(styles.full)
   }
 
   const FormWrapper = props.formProps ? Form : Fragment
@@ -89,6 +94,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'center',
     paddingBottom: SPACING * 10,
+  },
+  full: {
+    maxWidth: '100%',
+    maxHeight: '100%',
   },
   shadowContainer: {
     shadowColor: COLORS.BLACK,

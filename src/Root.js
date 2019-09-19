@@ -1,7 +1,7 @@
 // @flow
 
 import React, { useState, useEffect } from 'react'
-import { Dimensions } from 'react-native'
+import { Dimensions, StatusBar } from 'react-native'
 import Navigation from './navigation'
 import loadFonts from './fonts'
 import Context, { type ScreenSize } from './context'
@@ -84,6 +84,7 @@ const Root = () => {
 
   return (
     <Context.Provider value={contextValue}>
+      <StatusBar mode="light" />
       <Navigation />
     </Context.Provider>
   )

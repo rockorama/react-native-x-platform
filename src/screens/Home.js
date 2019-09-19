@@ -1,41 +1,86 @@
 // @flow
 
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { type NavigationScreenProps } from 'react-navigation'
 
 import Screen from '../components/Screen'
 import Text from '../components/Text'
+import Friends from '../components/Friends'
 import { COLORS } from '../styles'
 import Context from '../context/'
-import { useDoc, useCollection } from '../data/useData'
+import { useUser, useFriends } from '../data/useData'
+import Chat from './Chat'
 import EmailNotVerified from './EmailNotVerified'
 
 const Home = (props: NavigationScreenProps) => {
-  const { user } = useContext(Context)
+  const { user, screenSize } = useContext(Context)
 
-  const id = user ? user.uid : 0
-  const userData = useDoc(`users/${id}`)
-  const friends = useCollection(`users/${id}/friends`, {})
+  const id: string = user ? user.uid : '0'
+  const userData: Object = useUser(id)
+  const friends: Object = useFriends(id)
+
+  const [openChat, setOpenChat] = useState()
 
   if (user && !user.emailVerified) {
     return <EmailNotVerified />
   }
 
-  return (
+  const loading: boolean = userData.loading || friends.loading
+  const haveFriends: boolean = !loading && friends.data && !!friends.data.length
+
+  const onSelect = (chatId: string) => {
+    if (screenSize.width < 800) {
+      setOpenChat()
+      props.navigation.navigate(`/chat`, { id: chatId })
+    } else {
+      setOpenChat(chatId)
+    }
+  }
+
+  const friendsArea = (
     <Screen
+      full
       headerProps={{
-        title:
-          userData.loading || friends.loading ? 'Loading' : userData.data.name,
+        title: loading ? 'Loading' : 'Friends',
         icon: 'Settings',
         onPressIcon: () => props.navigation.navigate('/settings'),
       }}
-      noLogo={!friends.loading && friends.data && !!friends.data.length}>
-      <View style={styles.container}>
-        <Text variant="TITLE" center color={COLORS.RED}></Text>
-      </View>
+      buttonProps={{
+        title: 'Add friend',
+        onPress: () => props.navigation.navigate('/add-friend'),
+      }}
+      noLogo={haveFriends}
+      noScroll>
+      {!loading &&
+        (!haveFriends ? (
+          <Text style={styles.welcomeMessage} center color={COLORS.BLACK}>
+            Welcome! Invite your friends to start chatting.
+          </Text>
+        ) : (
+          <Friends
+            selected={openChat}
+            userId={id}
+            friends={friends.data}
+            onPressFriend={onSelect}
+          />
+        ))}
     </Screen>
   )
+  if (screenSize.width < 800) {
+    return friendsArea
+  } else {
+    return (
+      <View style={styles.container}>
+        <View style={styles.friendsArea}>{friendsArea}</View>
+        <View style={styles.chatArea}>
+          {openChat ? (
+            <Chat chatId={openChat} onPressBack={() => setOpenChat()} />
+          ) : null}
+        </View>
+      </View>
+    )
+  }
 }
 
 export default Home
@@ -44,7 +89,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.WHITE,
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  friendsArea: {
+    maxWidth: 400,
+    flex: 1,
+  },
+  chatArea: {
+    flex: 1,
+  },
+  welcomeMessage: {
+    maxWidth: 300,
+    alignSelf: 'center',
   },
 })

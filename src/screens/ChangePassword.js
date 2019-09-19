@@ -3,8 +3,8 @@
 import React, { useContext, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { type NavigationScreenProps } from 'react-navigation'
+import { getNewCredential } from '../data/firebase'
 
-import Navigate from '../navigation/Navigate'
 import { COLORS, SPACING } from '../styles'
 
 import Screen from '../components/Screen'
@@ -12,53 +12,44 @@ import Text from '../components/Text'
 import TextField, { ConfirmPasswordValidation } from '../components/TextField'
 
 import Context from '../context'
-import { auth } from '../data/firebase'
 
-const ResetPassword = (props: NavigationScreenProps) => {
+const ChangePassword = (props: NavigationScreenProps) => {
   const { user } = useContext(Context)
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
   const [error, setError] = useState(null)
 
-  if (user) {
-    return <Navigate to="/" />
-  }
-
   const onSubmit = async payload => {
-    if (payload.valid) {
+    if (payload.valid && user) {
       setLoading(true)
       setError(null)
+
       try {
-        await auth.confirmPasswordReset(
-          props.navigation.state.params.oobCode,
-          payload.fields.password,
-        )
+        const credential = getNewCredential(payload.fields.oldPassword)
+        await user.reauthenticateWithCredential(credential)
+        await user.updatePassword(payload.fields.password)
         setDone(true)
-      } catch (error) {
+      } catch (err) {
         setLoading(false)
-        setError(error.message)
+        setError(err.message)
       }
     }
   }
 
   const goBack = () => {
-    props.navigation.navigate('/login')
+    props.navigation.navigate('/settings')
   }
 
   if (done) {
     return (
       <Screen
         headerProps={{
-          title: 'Reset Password',
+          title: 'Change Password',
           onPressIcon: goBack,
-        }}
-        buttonProps={{
-          title: 'Login',
-          onPress: goBack,
         }}>
         <View style={styles.container}>
           <Text center style={styles.text}>
-            Your password was successfuly reset.
+            Your password was successfuly changed.
           </Text>
         </View>
       </Screen>
@@ -68,18 +59,24 @@ const ResetPassword = (props: NavigationScreenProps) => {
   return (
     <Screen
       headerProps={{
-        title: 'Reset Password',
+        title: 'Change Password',
         onPressIcon: goBack,
       }}
       buttonProps={{
-        title: 'Reset',
+        title: 'Save',
         submit: true,
-        loading,
+        loading: loading,
       }}
       formProps={{
         onSubmit,
       }}>
       <View style={styles.container}>
+        <TextField
+          required
+          type="password"
+          name="oldPassword"
+          label="Current Password"
+        />
         <TextField
           required
           type="password"
@@ -101,7 +98,7 @@ const ResetPassword = (props: NavigationScreenProps) => {
   )
 }
 
-export default ResetPassword
+export default ChangePassword
 
 const styles = StyleSheet.create({
   container: {

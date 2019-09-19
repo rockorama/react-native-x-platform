@@ -6,10 +6,13 @@ import { View, TouchableOpacity, StyleSheet } from 'react-native'
 import { SPACING } from '../styles/'
 import Text from './Text'
 import Icon from './Icon'
+import Avatar from './Avatar'
 
 export type HeaderProps = {
   title: string,
   icon?: string,
+  showAvatar?: boolean,
+  avatar?: string,
   onPressIcon?: () => any,
 }
 
@@ -26,6 +29,11 @@ const Header = (props: HeaderProps) => {
       <View style={styles.textContainer}>
         <Text variant="HEADER">{props.title}</Text>
       </View>
+      {props.showAvatar ? (
+        <View style={styles.avatar}>
+          <Avatar url={props.avatar} size="x-small" />
+        </View>
+      ) : null}
     </View>
   )
 }
@@ -41,6 +49,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     padding: SPACING * 4,
+  },
+  avatar: {
+    position: 'absolute',
+    right: 0,
+    padding: SPACING * 2,
   },
   textContainer: {
     height: SPACING * 13,
