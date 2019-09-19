@@ -95,7 +95,7 @@ const Chat = (props: Props) => {
               }
 
         return (
-          <Screen headerProps={headerProps} noLogo noScroll {...buttons}>
+          <Screen full headerProps={headerProps} noLogo noScroll {...buttons}>
             <View style={styles.container}>
               <View style={styles.avatarArea}>
                 <Avatar url={friend.avatar} size="large" />

@@ -40,7 +40,7 @@ const Home = (props: NavigationScreenProps) => {
 
   const friendsArea = (
     <Screen
-      full
+      full={haveFriends}
       headerProps={{
         title: loading ? 'Loading' : 'Friends',
         icon: 'Settings',
@@ -67,7 +67,7 @@ const Home = (props: NavigationScreenProps) => {
         ))}
     </Screen>
   )
-  if (screenSize.width < 800) {
+  if (screenSize.width < 800 || !haveFriends) {
     return friendsArea
   } else {
     return (
