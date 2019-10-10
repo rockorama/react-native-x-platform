@@ -17,7 +17,6 @@ type StyleProps = {
   right?: boolean,
   uppercase?: boolean,
   capitalize?: boolean,
-  i18nKey?: I18nKey,
   variant?: TextVariant,
   style?: Object | Array<Object>,
 }

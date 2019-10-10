@@ -8,6 +8,7 @@ import ROUTES from '../screens'
 
 type RouteProps = {
   history: {
+    push: (value: string, state?: Object) => void,
     navigate: (value: string, state?: Object) => void,
     goBack: () => void,
   },
