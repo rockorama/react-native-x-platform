@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "React Native XP App",
+    "name": "XP Messaging",
     "slug": "react-native-xp",
     "entryPoint": "./src/index-expo.js",
     "privacy": "public",
@@ -25,6 +25,9 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.perillo.xpmessaging"
     }
   }
 }

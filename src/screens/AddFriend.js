@@ -11,13 +11,11 @@ import Avatar from '../components/Avatar'
 
 import { COLORS, SPACING } from '../styles'
 import Context from '../context/'
-import { getDoc, getCollection, useFriends, addFriend } from '../data/useData'
+import { getCollection, addFriend } from '../data/useData'
 
 const AddFriend = (props: NavigationScreenProps) => {
-  const { user } = useContext(Context)
+  const { friends, user, userData } = useContext(Context)
   const id = user ? user.uid : '0'
-
-  const friends: Object = useFriends(id)
 
   const [friend, setFriend] = useState()
   const [loading, setLoading] = useState(false)
@@ -30,9 +28,7 @@ const AddFriend = (props: NavigationScreenProps) => {
 
   if (friend) {
     const isFriend =
-      friends &&
-      !friends.loading &&
-      !!friends.data.filter(f => f[friend.id]).length
+      !loading && friends && !!friends.filter(f => f[friend.id]).length
 
     const isMe = friend.id === id
 
@@ -41,8 +37,7 @@ const AddFriend = (props: NavigationScreenProps) => {
     const onAdd = async () => {
       try {
         setLoading(true)
-        const me = await getDoc(`users/${id}`)
-        await addFriend(me, friend)
+        await addFriend(userData, friend)
         props.navigation.navigate('/')
       } catch (err) {
         setLoading(false)

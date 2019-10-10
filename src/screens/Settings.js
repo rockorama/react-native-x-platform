@@ -12,12 +12,9 @@ import Avatar from '../components/Avatar'
 import { COLORS, SPACING } from '../styles'
 import { auth } from '../data/firebase'
 import Context from '../context/'
-import useData from '../data/useData'
 
 const Settings = (props: NavigationScreenProps) => {
-  const { user } = useContext(Context)
-  const id = user ? user.uid : 0
-  const userData = useData(`users/${id}`)
+  const { userData } = useContext(Context)
 
   return (
     <Screen
@@ -32,12 +29,12 @@ const Settings = (props: NavigationScreenProps) => {
       }}
       noLogo
       noScroll>
-      {!userData.loading && (
+      {!!userData && (
         <View style={styles.container}>
           <View style={styles.avatarArea}>
-            <Avatar url={userData.data.avatar} size="large" />
+            <Avatar url={userData.avatar} size="large" />
           </View>
-          <Text center>{userData && userData.data && userData.data.name}</Text>
+          <Text center>{userData.name}</Text>
 
           <View style={styles.buttons}>
             <View style={styles.button}>

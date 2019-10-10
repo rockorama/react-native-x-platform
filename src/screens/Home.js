@@ -9,16 +9,13 @@ import Text from '../components/Text'
 import Friends from '../components/Friends'
 import { COLORS } from '../styles'
 import Context from '../context/'
-import { useUser, useFriends } from '../data/useData'
 import Chat from './Chat'
 import EmailNotVerified from './EmailNotVerified'
 
 const Home = (props: NavigationScreenProps) => {
-  const { user, screenSize } = useContext(Context)
+  const { user, screenSize, friends } = useContext(Context)
 
   const id: string = user ? user.uid : '0'
-  const userData: Object = useUser(id)
-  const friends: Object = useFriends(id)
 
   const [openChat, setOpenChat] = useState()
 
@@ -26,8 +23,7 @@ const Home = (props: NavigationScreenProps) => {
     return <EmailNotVerified />
   }
 
-  const loading: boolean = userData.loading || friends.loading
-  const haveFriends: boolean = !loading && friends.data && !!friends.data.length
+  const haveFriends: boolean = !!friends && !!friends.length
 
   const onSelect = (chatId: string) => {
     if (screenSize.width < 800) {
@@ -42,7 +38,7 @@ const Home = (props: NavigationScreenProps) => {
     <Screen
       full={haveFriends}
       headerProps={{
-        title: loading ? 'Loading' : 'Friends',
+        title: 'Friends',
         icon: 'Settings',
         onPressIcon: () => props.navigation.navigate('/settings'),
       }}
@@ -52,19 +48,18 @@ const Home = (props: NavigationScreenProps) => {
       }}
       noLogo={haveFriends}
       noScroll>
-      {!loading &&
-        (!haveFriends ? (
-          <Text style={styles.welcomeMessage} center color={COLORS.BLACK}>
-            Welcome! Invite your friends to start chatting.
-          </Text>
-        ) : (
-          <Friends
-            selected={openChat}
-            userId={id}
-            friends={friends.data}
-            onPressFriend={onSelect}
-          />
-        ))}
+      {!haveFriends ? (
+        <Text style={styles.welcomeMessage} center color={COLORS.BLACK}>
+          Welcome! Invite your friends to start chatting.
+        </Text>
+      ) : (
+        <Friends
+          selected={openChat}
+          userId={id}
+          friends={friends || []}
+          onPressFriend={onSelect}
+        />
+      )}
     </Screen>
   )
   if (screenSize.width < 800 || !haveFriends) {

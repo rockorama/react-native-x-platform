@@ -13,7 +13,7 @@ import {
 
 import { Form, type FormSubmitPayload } from '@morpheus-ui/forms'
 
-import { COLORS, SPACING } from '../styles/'
+import { COLORS, SPACING, STATUS_BAR_HEIGHT } from '../styles/'
 import Header, { type HeaderProps } from './Header'
 import Icon from './Icon'
 import Button, { type ButtonProps } from './Button'
@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Platform.OS === 'web' ? COLORS.GREY_LIGHT : COLORS.WHITE,
+    paddingTop: STATUS_BAR_HEIGHT,
   },
   contentContainer: {
     backgroundColor: COLORS.WHITE,

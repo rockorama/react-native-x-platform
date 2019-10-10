@@ -11,12 +11,9 @@ import Avatar from '../components/Avatar'
 
 import { COLORS, SPACING } from '../styles'
 import Context from '../context/'
-import useData from '../data/useData'
 
 const AvatarUpload = (props: NavigationScreenProps) => {
-  const { user } = useContext(Context)
-  const id = user ? user.uid : 0
-  const userData = useData(`users/${id}`)
+  const { userData } = useContext(Context)
 
   return (
     <Screen
@@ -31,11 +28,11 @@ const AvatarUpload = (props: NavigationScreenProps) => {
       }}
       noLogo
       noScroll>
-      {!userData.loading && (
+      {userData && (
         <View style={styles.container}>
           <TouchableOpacity>
             <View style={styles.avatarArea}>
-              <Avatar url={userData.data.avatar} size="large" />
+              <Avatar url={userData.avatar} size="large" />
             </View>
             <Text center>
               {Platform.OS === 'web' ? 'Click' : 'Tap'} to change

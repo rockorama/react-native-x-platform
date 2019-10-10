@@ -10,6 +10,8 @@ export type ScreenSize = {
 export type ContextType = {
   screenSize: ScreenSize,
   user?: ?Object,
+  userData?: ?Object,
+  friends?: Array<Object>,
   refreshUser: () => any,
 }
 

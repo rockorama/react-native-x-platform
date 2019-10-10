@@ -9,21 +9,22 @@ import { COLORS, SPACING } from '../styles'
 import Screen from '../components/Screen'
 import Text from '../components/Text'
 import TextField from '../components/TextField'
-
+import { updateUser } from '../data/useData'
 import Context from '../context'
 
 const ChangeName = (props: NavigationScreenProps) => {
-  const { user } = useContext(Context)
+  const { user, userData, friends } = useContext(Context)
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
   const [error, setError] = useState(null)
 
   const onSubmit = async payload => {
-    if (payload.valid && user) {
+    if (payload.valid && user && friends) {
       setLoading(true)
       setError(null)
 
       try {
+        await updateUser(user.uid, { ...userData, ...payload.fields }, friends)
         setDone(true)
       } catch (error) {
         setLoading(false)
@@ -40,7 +41,7 @@ const ChangeName = (props: NavigationScreenProps) => {
     return (
       <Screen
         headerProps={{
-          title: 'Change Password',
+          title: 'Change Name',
           onPressIcon: goBack,
         }}>
         <View style={styles.container}>
@@ -67,7 +68,12 @@ const ChangeName = (props: NavigationScreenProps) => {
         onSubmit,
       }}>
       <View style={styles.container}>
-        <TextField required name="name" label="Name" />
+        <TextField
+          defaultValue={userData ? userData.name : null}
+          required
+          name="name"
+          label="Name"
+        />
         <Text style={styles.text} center variant="SMALL" color={COLORS.RED}>
           {error}
         </Text>

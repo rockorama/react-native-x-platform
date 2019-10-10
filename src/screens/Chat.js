@@ -11,7 +11,7 @@ import ChatView from '../components/ChatView'
 
 import { COLORS, SPACING } from '../styles'
 import Context from '../context/'
-import { useDoc, acceptFriend, deleteFriend } from '../data/useData'
+import { acceptFriend, deleteFriend } from '../data/useData'
 
 type Props = NavigationScreenProps & {
   onPressBack?: () => any,
@@ -20,23 +20,24 @@ type Props = NavigationScreenProps & {
 
 const Chat = (props: Props) => {
   const chatId = props.chatId || props.navigation.state.params.id
-  const { user } = useContext(Context)
+  const { user, friends } = useContext(Context)
   const id = user ? user.uid : '0'
-  const chat: Object = useDoc(`friendship/${chatId}`)
+
+  const chat: Object = friends ? friends.find(chat => chat.id === chatId) : null
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
   let friend
 
-  if (chat && chat.data) {
+  if (chat) {
     const {
       id: friendshipId,
       accepted,
       [id]: me,
       startedBy,
       ...friendId
-    } = chat.data
+    } = chat
     friend = {}
 
     Object.keys(friendId).forEach(fid => {

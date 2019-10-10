@@ -9,7 +9,8 @@ import {
 } from 'react-native'
 
 import { COLORS, RATIO, SPACING } from '../styles'
-import { useCollection, newMessage } from '../data/useData'
+import { newMessage } from '../data/useData'
+import { db } from '../data/firebase'
 import Context from '../context/'
 import Text from './Text'
 import Icon from './Icon'
@@ -24,13 +25,29 @@ const ChatView = (props: Props) => {
   const id: string = user ? user.uid : '0'
   const [message, setMessage] = useState('')
 
-  const messages = useCollection(`friendship/${props.chatId}/messages`, {
-    orderBy: [{ field: 'dateTime', direction: 'desc' }],
-  })
+  const [data, setData] = useState([])
 
   useEffect(() => {
     field && field.current && field.current.focus && field.current.focus()
   })
+
+  useEffect(() => {
+    return db
+      .collection(`friendship/${props.chatId}/messages`)
+      .orderBy('dateTime', 'desc')
+      .onSnapshot(collection => {
+        if (collection.size) {
+          setData(
+            collection.docs.map(item => ({
+              id: item.id,
+              ...item.data(),
+            })),
+          )
+        } else {
+          setData([])
+        }
+      })
+  }, [props.chatId])
 
   const sendMessage = () => {
     if (message) {
@@ -62,29 +79,25 @@ const ChatView = (props: Props) => {
 
   return (
     <View style={styles.container}>
-      {!messages || messages.loading ? (
-        <Text style={styles.welcomeMessage} center color={COLORS.BLACK}>
-          Loading.
-        </Text>
-      ) : (
-        <FlatList
-          inverted
-          key={`messages-${messages.data.length}`}
-          keyboardShouldPersistTaps="handled"
-          keyExtractor={keyExtractor}
-          data={messages.data}
-          renderItem={renderItem}
-          initialNumToRender={30}
-          onScrollToIndexFailed={() => {}}
-          getItemLayout={(data, index) => ({
-            length: SPACING * 12,
-            offset: SPACING * 12 * index,
-            index,
-          })}
-        />
-      )}
+      <FlatList
+        inverted
+        key={`messages-${data.length}`}
+        keyboardShouldPersistTaps="handled"
+        keyExtractor={keyExtractor}
+        data={data}
+        renderItem={renderItem}
+        initialNumToRender={30}
+        onScrollToIndexFailed={() => {}}
+        getItemLayout={(data, index) => ({
+          length: SPACING * 12,
+          offset: SPACING * 12 * index,
+          index,
+        })}
+      />
+
       <View style={styles.inputView}>
         <TextInput
+          placeholder="Write your message"
           ref={field}
           value={message}
           onChangeText={setMessage}

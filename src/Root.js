@@ -5,7 +5,7 @@ import { Dimensions, StatusBar } from 'react-native'
 import Navigation from './navigation'
 import loadFonts from './fonts'
 import Context, { type ScreenSize } from './context'
-import { auth } from './data/firebase'
+import { auth, db } from './data/firebase'
 
 const Root = () => {
   let userSubscription: () => any
@@ -14,11 +14,15 @@ const Root = () => {
     width: 0,
     height: 0,
   })
-
-  const [ready, setReady] = useState<boolean>(false)
-  const [user, setUser] = useState<Object>(null)
   const [fontsLoaded, setFontsLoaded] = useState<boolean>(false)
 
+  const [user, setUser] = useState<Object>(null)
+  const [userData, setUserData] = useState<Object>(null)
+  const [friends, setFriends] = useState<Object>(null)
+
+  const [ready, setReady] = useState<boolean>(false)
+
+  //Check screenSizes
   useEffect(() => {
     const defineDimensions = () => {
       const dimensions = Dimensions.get('window')
@@ -32,6 +36,7 @@ const Root = () => {
     }
   })
 
+  //load fonts
   useEffect(() => {
     const loadingFonts = async () => {
       await loadFonts()
@@ -41,6 +46,7 @@ const Root = () => {
     loadingFonts()
   })
 
+  // Check if the user is logger In and listen for auth state changing
   const refreshUser = () => {
     userSubscription = auth.onAuthStateChanged(u => {
       if (!u) {
@@ -61,6 +67,7 @@ const Root = () => {
     return unsubscribe
   })
 
+  // If the user's email is not verified, we will keep checking every second for the verification
   useEffect(() => {
     const checkVerification = () => {
       setTimeout(async () => {
@@ -78,9 +85,57 @@ const Root = () => {
     }
   })
 
-  if (!ready || !fontsLoaded || !screenSize.width) return null
+  // get the user personal data
+  useEffect(() => {
+    if (user) {
+      return db.doc(`users/${user.uid}`).onSnapshot(doc => {
+        if (doc.exists) {
+          setUserData({
+            id: doc.id,
+            ...doc.data(),
+          })
+        } else {
+          setUserData(null)
+        }
+      })
+    } else {
+      setUserData(null)
+    }
+  }, [user])
 
-  const contextValue = { screenSize, user, refreshUser }
+  // get the user chat/friends list
+  useEffect(() => {
+    if (user) {
+      return db
+        .collection(`friendship`)
+        .where(`${user.uid}.id`, '==', user.uid)
+        .onSnapshot(collection => {
+          if (collection.size) {
+            setFriends(
+              collection.docs.map(item => ({
+                id: item.id,
+                ...item.data(),
+              })),
+            )
+          } else {
+            setFriends([])
+          }
+        })
+    } else {
+      setFriends(null)
+    }
+  }, [user])
+
+  if (
+    !ready ||
+    !fontsLoaded ||
+    !screenSize.width ||
+    (user && !userData) ||
+    (user && !friends)
+  )
+    return null
+
+  const contextValue = { screenSize, user, refreshUser, userData, friends }
 
   return (
     <Context.Provider value={contextValue}>

@@ -1,7 +1,5 @@
 // @flow
 
-import { useEffect, useState } from 'react'
-
 import { db } from './firebase'
 
 type WhereClause = {
@@ -19,137 +17,6 @@ type Options = {
   type?: 'collection' | 'doc',
   where?: Array<WhereClause>,
   orderBy?: Array<OrderByClause>,
-}
-
-const subscribeCollection = (
-  path: string,
-  setData: any => void,
-  setLoading: any => void,
-  options: Options,
-) => {
-  let listener = db.collection(path)
-
-  if (options.where && options.where.length) {
-    options.where.forEach(w => {
-      listener = listener.where(w.field, w.operator, w.value)
-    })
-  }
-
-  if (options.orderBy && options.orderBy.length) {
-    options.orderBy.forEach(o => {
-      listener = listener.orderBy(o.field, o.direction || 'asc')
-    })
-  }
-
-  listener.onSnapshot(
-    collection => {
-      if (collection.size) {
-        setData(
-          collection.docs.map(item => ({
-            id: item.id,
-            ...item.data(),
-          })),
-        )
-        setLoading(false)
-      } else {
-        setData([])
-        setLoading(false)
-      }
-    },
-    () => {
-      // ignore errors for now
-    },
-  )
-
-  return listener
-}
-
-const subscribeDoc = (
-  path: string,
-  setData: any => void,
-  setLoading: any => void,
-) => {
-  return db.doc(path).onSnapshot(
-    doc => {
-      if (doc.exists) {
-        setData({
-          id: doc.id,
-          ...doc.data(),
-        })
-        setLoading(false)
-      } else {
-        setData(null)
-        setLoading(false)
-      }
-    },
-    () => {
-      // ignore errors for now
-    },
-  )
-}
-
-export const useCollection = (path: string, options: Options) => {
-  const [data, setData] = useState()
-  const [loading, setLoading] = useState(true)
-  useEffect(() => {
-    const unsubscribe = subscribeCollection(path, setData, setLoading, options)
-    return () => {
-      try {
-        unsubscribe && unsubscribe()
-      } catch (err) {
-        //on web the unsubscribe function is becoming undefined
-      }
-    }
-  }, [path])
-
-  return { loading, data }
-}
-
-export const useDoc = (path: string) => {
-  const [data, setData] = useState()
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const unsubscribe = subscribeDoc(path, setData, setLoading)
-    return () => {
-      try {
-        unsubscribe && unsubscribe()
-      } catch (err) {
-        //on web the unsubscribe function is becoming undefined
-      }
-    }
-  }, [path])
-
-  return { loading, data }
-}
-
-export default (path: string, options?: Options) => {
-  if (options && options.type === 'collection') {
-    return useCollection(path, options)
-  }
-  return useDoc(path)
-}
-
-export const useFriends = (id: string) => {
-  return useCollection(`friendship`, {
-    where: [{ field: `${id}.id`, operator: '==', value: id }],
-  })
-}
-
-export const useUser = (id: string) => {
-  return useDoc(`users/${id}`)
-}
-
-export const getDoc = async (path: string) => {
-  const doc = await db.doc(path).get()
-  if (doc.exists) {
-    return {
-      id: doc.id,
-      ...doc.data(),
-    }
-  }
-
-  return null
 }
 
 export const getCollection = async (path: string, options: Options) => {
@@ -214,4 +81,25 @@ export const newMessage = async (
   }
 
   return db.collection(`friendship/${friendshipId}/messages`).add(obj)
+}
+
+export const updateUser = async (
+  userId: string,
+  newData: Object,
+  friends: Array<Object>,
+) => {
+  const batch = db.batch()
+
+  friends.forEach(chat => {
+    const ref = db.collection(`friendship`).doc(chat.id)
+    batch.set(ref, {
+      ...chat,
+      [userId]: newData,
+    })
+  })
+
+  const userRef = db.collection('users').doc(userId)
+  batch.set(userRef, newData)
+
+  return batch.commit()
 }
