@@ -7,7 +7,7 @@ import loadFonts from './fonts'
 import Context, { type ScreenSize } from './context'
 
 const Root = () => {
-  const [screenSize, setScreenSize] = useState<ScreenSize>()
+  const [screenSize, setScreenSize] = useState<?ScreenSize>(null)
   const [fontsLoaded, setFontsLoaded] = useState<boolean>(false)
 
   useEffect(() => {
