@@ -1,5 +1,6 @@
 // @flow
 import React, { useContext, useState, useRef, useEffect } from 'react'
+import moment from 'moment'
 import {
   View,
   StyleSheet,
@@ -68,12 +69,21 @@ const ChatView = (props: Props) => {
       containerStyle.push(styles.friendsMessageContainer)
       messageStyle.push(styles.friendsMessage)
     }
+
     return (
-      <View style={containerStyle}>
-        <Text style={messageStyle} color={COLORS.WHITE}>
-          {item.message}
-        </Text>
-      </View>
+      <>
+        <View style={containerStyle}>
+          <Text style={messageStyle} color={COLORS.WHITE}>
+            <Text size={10}>
+              {moment(item.dateTime.seconds * 1000).format('lll')}
+              {'\n'}
+              {'\n'}
+            </Text>
+
+            {item.message}
+          </Text>
+        </View>
+      </>
     )
   }
 
@@ -148,6 +158,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   message: {
+    minWidth: 200,
     borderRadius: 3,
     padding: SPACING * 2,
     fontSize: RATIO * 14,

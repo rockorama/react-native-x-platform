@@ -20,6 +20,7 @@
     "expo-image-picker": "~6.0.0",
     "firebase": "^6.6.0",
     "memoize-one": "^5.1.1",
+    "moment": "^2.25.3",
     "query-string": "^6.8.3",
     "react": "16.8.3",
     "react-dom": "^16.8.6",

@@ -10,7 +10,6 @@ import Friends from '../components/Friends'
 import { COLORS } from '../styles'
 import Context from '../context/'
 import Chat from './Chat'
-import EmailNotVerified from './EmailNotVerified'
 
 const Home = (props: NavigationScreenProps) => {
   const { user, screenSize, friends } = useContext(Context)
@@ -18,10 +17,6 @@ const Home = (props: NavigationScreenProps) => {
   const id: string = user ? user.uid : '0'
 
   const [openChat, setOpenChat] = useState()
-
-  if (user && !user.emailVerified) {
-    return <EmailNotVerified />
-  }
 
   const haveFriends: boolean = !!friends && !!friends.length
 
